@@ -10,12 +10,14 @@ const PORT = 4000;
 /* express application 생성*/
 const app = express();
 const logger = morgan("dev");
-app.use(logger);
 
 /* 라우터 쓰기
 라우터가 express한테 누군가가 /videos로 시작하는 url에 접근하면
 videoRouter에 있는 컨트롤러로 찾게함
 */
+app.set("view engine", "pug");
+app.set("views", process.cwd() + "/src/views");
+app.use(logger);
 app.use("/", globalRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
