@@ -1,52 +1,24 @@
-let videos = [
-  {
-    title: "First Video",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 1,
-    id: 1,
-  },
-  {
-    title: "Second Video",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 1,
-  },
-  {
-    title: "Third Video",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 1,
-  },
-];
+import Video from "../models/Video.js";
 
-export const trending = (req, res) => {
-  return res.render("home", { pageTitle: "Home", videos });
+export const home = (req, res) => {
+  Video.find({}, (error, videos) => {
+    return res.render("home", { pageTitle: "Home", videos }); // renderëŠ” pugì—ì„œ video arrayê°€ í•„ìš”í•˜ë‹¤ê³  ì •ì˜í•¨
+  });
 };
 
 export const watch = (req, res) => {
   const { id } = req.params;
-  // À§¿Í µ¿ÀÏ const id = req.params.id; ES6ÀÓ
-  // ±×³É js·Î ÇÏ¸é const id= req.params.id;
-  const video = videos[id - 1];
-  res.render("watch", { pageTitle: `Watching ${video.title}`, video });
+  res.render("watch", { pageTitle: `Watching` });
 };
-// formÀ» È­¸é¿¡ º¸¿©ÁÖ´Â(formÀ» render)
+// formï¿½ï¿½ È­ï¿½é¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½(formï¿½ï¿½ render)
 export const getEdit = (req, res) => {
   const { id } = req.params;
-  const video = videos[id - 1];
-  res.render("edit", { pageTitle: `Editing: ${video.title}`, video });
+  res.render("edit", { pageTitle: `Editing` });
 };
-// ºñµğ¿À¸¦ ¼öÁ¤. º¯°æ»çÇ×À» ÀúÀåÇÏ´Â
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½
 export const postEdit = (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
-  videos[id - 1].title = title;
   return res.redirect(`/videos/${id}`);
 };
 export const upload = (req, res) => res.send("Upload");

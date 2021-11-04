@@ -1,12 +1,12 @@
+// 모두가 알 수 있게 import 하는 방법
 import "./db.js";
+import "./models/Video.js";
 /* node_modules에서 "express"라는 패키지를 express라는 이름으로 갖고오기*/
 import express from "express";
 import morgan from "morgan";
 import globalRouter from "./routers/globalRouter.js";
 import videoRouter from "./routers/videoRouter.js";
 import userRouter from "./routers/userRouter.js";
-
-const PORT = 4000;
 
 /* express application 생성*/
 const app = express();
@@ -24,8 +24,4 @@ app.use("/", globalRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
 
-const handleListening = () =>
-  console.log(`Server listening on port http://localhost:${PORT}`);
-
-/*request listening request 기다림*/
-app.listen(4000, handleListening);
+export default app;

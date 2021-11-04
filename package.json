@@ -8,7 +8,7 @@
     "url": "git+https://github.com/HyejinMa/wetube.git"
   },
   "scripts": {
-    "dev": "nodemon -L --exec babel-node src/server.js"
+    "dev": "nodemon -L --exec babel-node src/init.js"
   },
   "author": "HyejinMa",
   "license": "MIT",
