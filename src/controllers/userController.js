@@ -57,6 +57,11 @@ export const postLogin = async (req, res) => {
       errorMessage: "Wrong password",
     });
   }
+  // 로그인한 유저의 정보를 세션에 추가
+  // 각 브라우저마다 서로 다른 세션을 가지고 있음
+  req.session.loggedIn = true;
+  req.session.user = user;
+
   console.log("LOG USER IN! COMING SOON!");
   return res.redirect("/");
 };
