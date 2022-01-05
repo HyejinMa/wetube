@@ -4,6 +4,7 @@ import "./models/Video.js";
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter.js";
 import videoRouter from "./routers/videoRouter.js";
 import userRouter from "./routers/userRouter.js";
@@ -20,9 +21,10 @@ app.use(express.urlencoded({ extended: true }));
 // 세션 미들웨어 사이트로 들어오는 모든 것 기억
 app.use(
   session({
-    secret: "Hello!",
+    secret: process.env.COOKIE_SECRET,
     resave: true,
     saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
 
