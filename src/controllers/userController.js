@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
@@ -64,6 +65,38 @@ export const postLogin = async (req, res) => {
 
   console.log("LOG USER IN! COMING SOON!");
   return res.redirect("/");
+};
+
+export const startGithubLogin = (req, res) => {
+  const config = {
+    clientId: process.env.GH_CLIENT,
+    allow_signup: false,
+    scope: "read:user user:email",
+  };
+  const params = new URLSearchParams(config).toString();
+  const baseUrl = "https://github.com/login/oauth/authorize?&{params}";
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.redirect(finalUrl);
+};
+
+export const finishGithubLogin = async (req, res) => {
+  const baseUrl = "https://github.com/login/oauth/authorize?&{params}";
+  const config = {
+    client_id: process.env.GH_CLIENT,
+    client_secret: process.env.GH_SECRET,
+    code: req.query.code,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  const data = await fetch(finalUrl, {
+    method: "POST",
+    headers: {
+      Accept: "application/json", // json으로 응답받기 위해서 이를 설정해야함
+    },
+  });
+  const json = await data.json();
+  console.log(json);
+  res.send(JSON.stringify(json));
 };
 
 export const edit = (req, res) => res.send("Edit User");
