@@ -59,7 +59,7 @@ export const postLogin = async (req, res) => {
     });
   }
   // 로그인한 유저의 정보를 세션에 추가
-  // 각 브라우저마다 서로 다른 세션을 가지고 있음
+  // 각 브라우저마다 서로 다른 세션을 가지고 있음s
   req.session.loggedIn = true;
   req.session.user = user;
 
@@ -124,6 +124,8 @@ export const finishGithubLogin = async (req, res) => {
     let user = await User.findOne({ email: emailObj.email });
     if (!user) {
       user = await User.create({
+        // github API 에서 가져옴
+        avatarUrl: userData.avatar_url,
         name: userData.name,
         username: userData.login,
         email: emailObj.email,
@@ -141,8 +143,11 @@ export const finishGithubLogin = async (req, res) => {
   }
 };
 
-export const edit = (req, res) => res.send("Edit User");
-export const remove = (req, res) => res.send("Remove User");
+export const logout = (req, res) => {
+  req.session.destroy();
+  return res.redirect("/");
+};
 
-export const logout = (req, res) => res.send("Log out");
+export const edit = (req, res) => res.send("Edit User");
+
 export const see = (req, res) => res.send("See User");
