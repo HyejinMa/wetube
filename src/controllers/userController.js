@@ -152,8 +152,74 @@ export const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
 
-export const postEdit = (req, res) => {
-  return res.render("edit-profile");
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id, avatarUrl }, // session에서 현재 로그인된 user id 가지고옴
+    },
+    body: { name, email, username, location }, // form에서 가져오는 것. input에 name을 입력해줘야함
+    file,
+  } = req; // constn i = req.session.users.id 와 같음 그러나 이게 좀더 범용적
+
+  // 챌린지: 프로필 수정 여부 알아내기 및 기존의 것과 일치하는지 검사
+  const findUsername = await User.findOne({ username });
+  const findEmail = await User.findOne({ email });
+  if (
+    (findUsername != null && findUsername._id != _id) ||
+    (findEmail != null && findEmail._id != _id)
+  ) {
+    return res.render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "User is exist",
+    });
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      avatarUrl: file ? file.path : avatarUrl,
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+
+  req.session.user = updatedUser;
+  return res.redirect("/users/edit");
+};
+
+export const getChangePassword = (req, res) => {
+  return res.render("change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = async (req, res) => {
+  // session에서 현재 로그인된 사용자를 확인하기
+  const {
+    session: {
+      user: { _id, password }, // session에서 현재 로그인된 user id 가지고옴
+    },
+    body: { oldPassword, newPassword, newPasswordConfirmation }, // form에서 가져오는 것. input에 name을 입력해줘야함
+  } = req; // constn i = req.session.users.id 와 같음 그러나 이게 좀더 범용적
+  const ok = await bcrypt.compare(oldPassword, password);
+  if (!ok) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The current password is incorrect",
+    });
+  }
+  if (newPassword !== newPasswordConfirmation) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The password does not match the confirmation",
+    });
+  }
+  const user = await User.findById(_id);
+  user.password = newPassword;
+  await user.save(); // middleware 호출
+  req.session.user.password = user.password; // session을 업데이트 해줘야한다.  DB의 가장 최근의 비밀번호
+  // send notification
+  return res.redirect("/users/logout");
 };
 
 export const see = (req, res) => res.send("See User");
