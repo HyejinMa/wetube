@@ -203,13 +203,13 @@ export const postChangePassword = async (req, res) => {
   } = req; // constn i = req.session.users.id 와 같음 그러나 이게 좀더 범용적
   const ok = await bcrypt.compare(oldPassword, password);
   if (!ok) {
-    return res.status(400).render("change-password", {
+    return res.status(400).render("users/change-password", {
       pageTitle: "Change Password",
       errorMessage: "The current password is incorrect",
     });
   }
   if (newPassword !== newPasswordConfirmation) {
-    return res.status(400).render("change-password", {
+    return res.status(400).render("users/change-password", {
       pageTitle: "Change Password",
       errorMessage: "The password does not match the confirmation",
     });
@@ -222,4 +222,14 @@ export const postChangePassword = async (req, res) => {
   return res.redirect("/users/logout");
 };
 
-export const see = (req, res) => res.send("See User");
+export const see = async (req, res) => {
+  const { id } = req.params; // 누구나 볼 수 있어야 하니 session 에서 id url을 갖고 오지 않는다.
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User not found." });
+  }
+  return res.render("users/profile", {
+    pageTitle: user.name,
+    user: user,
+  });
+};
