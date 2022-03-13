@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev:server": "nodemon",
-    "dev:assets": "webpack --config webpack.config.cjs"
+    "dev:assets": "webpack"
   },
   "author": "HyejinMa",
   "license": "MIT",

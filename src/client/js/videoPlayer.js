@@ -22,7 +22,7 @@ const handlePlay = () => (playBtn.innerText = "Pause");
 
 const handleMute = (e) => {
   if (video.muted) {
-    video.mutedd = false;
+    video.muted = false;
   } else {
     video.muted = true;
   }
@@ -43,7 +43,7 @@ const handleVolumeChange = (event) => {
 };
 
 const formatTime = (seconds) =>
-  new Date(seconds * 1000).toISOString().subString(11, 19);
+  new Date(seconds * 1000).toISOString().substring(11, 19);
 
 const handleLoadedMetadata = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration));
@@ -55,8 +55,18 @@ const handleTimeUpdate = () => {
   timeline.value = Math.floor(video.currentTime);
 };
 
+const handleTimelineChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+  video.currentTime = value;
+};
+
+// 수정사항이 잇읍니다
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMute);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
+timeline.addEventListener("input", handleTimelineChange);
