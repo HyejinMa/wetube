@@ -20,7 +20,7 @@ const handlePlayClick = (e) => {
 const handlePause = () => (playBtn.innerText = "Play");
 const handlePlay = () => (playBtn.innerText = "Pause");
 
-const handleMute = (e) => {
+const handleMuteClick = (e) => {
   if (video.muted) {
     video.muted = false;
   } else {
@@ -65,7 +65,7 @@ const handleTimelineChange = (event) => {
 // 수정사항이 잇읍니다
 
 playBtn.addEventListener("click", handlePlayClick);
-muteBtn.addEventListener("click", handleMute);
+muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
