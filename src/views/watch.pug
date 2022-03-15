@@ -2,7 +2,7 @@ extends base.pug
 
 block content 
     div#videoContainer
-        video(src="/"+video.fileUrl)
+        video(src="/"+video.fileUrl, controls)
         div
             button#play Play
             button#mute Mute

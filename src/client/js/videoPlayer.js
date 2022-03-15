@@ -42,6 +42,11 @@ const handleVolumeChange = (event) => {
   }
   volumeValue = value; // volume 전역 변수 업데이트
   video.volume = value; // 비디오의 볼륨 바꾸기
+
+  if (volumeValue == 0) {
+    video.muted = true;
+    muteBtn.innerText = "Unmute";
+  }
 };
 
 const formatTime = (seconds) =>
