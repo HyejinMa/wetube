@@ -3,8 +3,15 @@ const video = document.getElementById("preivew");
 
 let stream;
 let recorder;
+let videoFile;
 
-const handleDownload = () => {};
+const handleDownload = () => {
+  const a = document.createElement("a");
+  a.href = videoFile;
+  a.download = "MyRecording.webm";
+  document.body.appendChile(a);
+  a.click();
+};
 
 const handleStop = () => {
   startBtn.innerText = "Download Recording";
@@ -22,7 +29,7 @@ const handleStart = () => {
   recorder = new MediaRecorder(stream);
   recorder.ondataavailable = (event) => {
     console.log(event.data);
-    const videoFile = URL.createObjectURL(event.data); // 녹화한걸 미리보고싶다! 브라우저 메모리에서 갖고오기
+    videoFile = URL.createObjectURL(event.data); // 녹화한걸 미리보고싶다! 브라우저 메모리에서 갖고오기
     video.srcObject = null;
     video.src = videoFile;
     video.loop = true;
