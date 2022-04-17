@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const videoSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true, maxLength: 80 },
   fileUrl: { type: String, required: true },
-  description: { type: String, required: true, minLength: 20 },
+  thumbUrl: { type: String, required: true },
+  description: { type: String, required: true, minLength: 2 },
   createdAt: { type: Date, required: true, default: Date.now }, // controller에서 video form 객체에 createdAt: Date.now()와 같음
   hashtags: [{ type: String, trim: true }],
   meta: {

@@ -56,13 +56,14 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session;
-  const file = req.file; // multer는 req.file을 제공해줌. file 변수 안에는 'file의 경로'가 저장됨!!!
+  const { video, thumb } = req.files; // multer는 req.file을 제공해줌. file 변수 안에는 'file의 경로'가 저장됨!!!
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl: file.path,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
