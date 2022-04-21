@@ -19,7 +19,7 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
-
+app.use(express.json());
 // 세션 미들웨어 사이트로 들어오는 모든 것 기억
 app.use(
   session({
