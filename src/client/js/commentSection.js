@@ -21,6 +21,7 @@ const handleSubmit = (event) => {
     },
     body: JSON.stringify({ text, rating: "5" }),
   });
+  textarea.value = "";
 };
 
 // 사용자가 로그인이 되어있지 않으면, form을 불러올 수 없다.
